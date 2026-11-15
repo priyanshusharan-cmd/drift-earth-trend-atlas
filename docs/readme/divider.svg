@@ -1,1 +1,11 @@
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' width='1200' height='40'><defs><linearGradient id='d' x1='0' x2='1'><stop offset='0' stop-color='#4393c3'/><stop offset='.5' stop-color='#f4a582'/><stop offset='1' stop-color='#d6604d'/></linearGradient></defs><path d='M0 20 Q 75 2 150 20 T 300 20 T 450 20 T 600 20 T 750 20 T 900 20 T 1050 20 T 1200 20 T 1350 20' fill='none' stroke='url(#d)' stroke-width='3' stroke-linecap='round'><animateTransform attributeName='transform' type='translate' values='0 0;-300 0' dur='4s' repeatCount='indefinite'/></path></svg>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' width='1200' height='40'>
+<defs>
+<linearGradient id='d' x1='0' x2='1200' y1='0' y2='0' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='#4393c3'/><stop offset='.5' stop-color='#f4a582'/><stop offset='1' stop-color='#d6604d'/></linearGradient>
+<mask id='m' maskUnits='userSpaceOnUse' x='0' y='0' width='1200' height='40'>
+<path d='M0 20 C 50 6 100 6 150 20 S 250 34 300 20 C 350 6 400 6 450 20 S 550 34 600 20 C 650 6 700 6 750 20 S 850 34 900 20 C 950 6 1000 6 1050 20 S 1150 34 1200 20 C 1250 6 1300 6 1350 20 S 1450 34 1500 20' fill='none' stroke='#fff' stroke-width='3' stroke-linecap='round'>
+<animateTransform attributeName='transform' type='translate' from='0 0' to='-300 0' dur='4s' repeatCount='indefinite'/>
+</path>
+</mask>
+</defs>
+<rect width='1200' height='40' fill='url(#d)' mask='url(#m)'/>
+</svg>
