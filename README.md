@@ -6,7 +6,7 @@
 
 [**Open Drift live**](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/) ·
 [Demo slides](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/slides.html) ·
-[30-second video](docs/Drift-demo-30s.mp4) ·
+[30-second video](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/demo.html) ·
 [Point lab](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/points.html) ·
 [Field guide](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/learn.html)
 

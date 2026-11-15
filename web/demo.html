@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo video · Drift</title>
+  <meta name="description" content="A 30-second narrated demo of Drift, an Earth trend atlas for NASA Space Apps 2026.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232166ac'/%3E%3Cpath d='M2 16a14 14 0 0 0 28 0z' fill='%23b2182b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV,SHRP@300..700,0,0..40&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script type="module" src="js/page.js"></script>
+</head>
+<body class="content-page">
+  <a class="skip" href="#main">Skip to the content</a>
+  <canvas class="cosmos" id="cosmos" aria-hidden="true"></canvas>
+  <canvas class="cosmos cosmos-front" id="cosmos-front" aria-hidden="true"></canvas>
+  <header class="bar">
+    <a class="mark" href="index.html" aria-label="Drift home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><path d="M3 16a13 13 0 0 0 26 0"/><path d="M6 10c6 3 14-3 20 0M5 22c6-3 16 3 22 0" class="mark-wave"/></svg>
+      <span>Drift</span>
+    </a>
+    <nav class="bar-links" aria-label="Pages"><a href="index.html#atlas">Atlas</a><a href="index.html#cases">Cases</a><a href="points.html">Point lab</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Slides</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg>
+    </button>
+    <span class="progress" id="progress" aria-hidden="true"></span>
+  </header>
+  <main class="page" id="main">
+    <section class="page-hero" style="padding-bottom:20px">
+      <p class="kicker reveal in">Demo · 30 seconds</p>
+      <h1 class="reveal in" style="--i:1">Drift in <em class="grad">30 seconds.</em></h1>
+      <p class="lede reveal in" style="--i:2">A narrated tour of Drift: NASA climate records, a significance test for every place on Earth, and tools that turn anyone into an Earth data detective.</p>
+    </section>
+    <section class="page-section" style="border-top:0;padding-top:0">
+      <div class="demo-frame reveal in" style="--i:3">
+        <video id="demo" controls playsinline preload="auto" poster="assets/drift-demo-poster.jpg">
+          <source src="assets/drift-demo.mp4" type="video/mp4">
+          <track kind="captions" srclang="en" label="English" src="assets/drift-demo.vtt">
+        </video>
+        <button class="demo-play" id="demo-play" type="button" aria-label="Play the demo with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>Play with sound</span></button>
+      </div>
+      <div class="btn-row"><a class="cta" href="index.html"><span>Try Drift live</span></a><a class="cta-ghost" href="slides.html"><span>View the slides</span></a><a class="cta-ghost" href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026"><span>Source code</span></a></div>
+    </section>
+  </main>
+  <script>
+    const v=document.getElementById('demo'), b=document.getElementById('demo-play');
+    b.addEventListener('click',()=>{v.muted=false;v.play();});
+    v.addEventListener('play',()=>b.classList.add('gone')); v.addEventListener('pause',()=>{if(!v.ended)return;b.classList.remove('gone')});
+    v.addEventListener('ended',()=>b.classList.remove('gone'));
+  </script>
+  <footer class="foot">
+    <div class="foot-grid">
+      <div><p class="foot-mark">Drift</p><p>An Earth trend atlas built for the NASA Space Apps Challenge 2026, "Be an Earth System Trend Detective".</p></div>
+      <nav aria-label="Pages"><a href="index.html">Atlas</a><a href="index.html#cases">Case files</a><a href="points.html">Point lab</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Demo slides</a><a href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026">Source on GitHub</a></nav>
+      <p class="fine">Data: NASA GISS GISTEMP v4 and GPCP v2.3. Not endorsed by NASA.</p>
+    </div>
+  </footer>
+</body>
+</html>
