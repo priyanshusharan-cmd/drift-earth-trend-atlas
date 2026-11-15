@@ -1,0 +1,129 @@
+{
+  "seasons": {
+    "annual": {
+      "label": "Annual mean",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "minMonths": 10
+    },
+    "djf": {
+      "label": "Dec–Feb",
+      "months": [
+        12,
+        1,
+        2
+      ],
+      "minMonths": 3
+    },
+    "mam": {
+      "label": "Mar–May",
+      "months": [
+        3,
+        4,
+        5
+      ],
+      "minMonths": 3
+    },
+    "jja": {
+      "label": "Jun–Aug",
+      "months": [
+        6,
+        7,
+        8
+      ],
+      "minMonths": 3
+    },
+    "son": {
+      "label": "Sep–Nov",
+      "months": [
+        9,
+        10,
+        11
+      ],
+      "minMonths": 3
+    }
+  },
+  "datasets": [
+    {
+      "id": "gistemp",
+      "name": "surface temperature",
+      "title": "Surface temperature anomaly",
+      "product": "NASA GISTEMP v4",
+      "institution": "NASA Goddard Institute for Space Studies",
+      "units": "°C",
+      "kind": "anomaly",
+      "baseline": "1951–1980",
+      "palette": "temperature",
+      "resolution": "2° × 2°, 1200 km smoothing",
+      "defaultWindow": [
+        1981,
+        null
+      ],
+      "minYear": 1900,
+      "source": {
+        "type": "single-netcdf",
+        "url": "https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz",
+        "variable": "tempanomaly",
+        "lat": "lat",
+        "lon": "lon",
+        "time": "time"
+      },
+      "storeScale": 0.01,
+      "citation": "GISTEMP Team, 2026: GISS Surface Temperature Analysis (GISTEMP), version 4. NASA Goddard Institute for Space Studies. Lenssen et al. (2024), J. Geophys. Res. Atmos.",
+      "landing": "https://data.giss.nasa.gov/gistemp/",
+      "words": {
+        "rise": "warmed",
+        "fall": "cooled",
+        "noun": "warming",
+        "antiNoun": "cooling"
+      },
+      "relativeUnits": false
+    },
+    {
+      "id": "gpcp",
+      "name": "precipitation",
+      "title": "Precipitation rate",
+      "product": "GPCP v2.3 monthly",
+      "institution": "NASA GSFC / University of Maryland ESSIC, distributed by NOAA NCEI",
+      "units": "mm/day",
+      "kind": "absolute",
+      "palette": "precipitation",
+      "resolution": "2.5° × 2.5°, satellite–gauge merge",
+      "defaultWindow": [
+        1979,
+        null
+      ],
+      "minYear": 1979,
+      "source": {
+        "type": "monthly-netcdf-index",
+        "index": "https://www.ncei.noaa.gov/data/global-precipitation-climatology-project-gpcp-monthly/access/",
+        "filePattern": "gpcp_v02r03_monthly_d(\\d{4})(\\d{2})_c\\d+\\.nc",
+        "variable": "precip",
+        "lat": "latitude",
+        "lon": "longitude"
+      },
+      "storeScale": 0.01,
+      "citation": "Adler, R. et al. (2018): The Global Precipitation Climatology Project (GPCP) Monthly Analysis (New Version 2.3) and a Review of 2017 Global Precipitation. Atmosphere, 9(4), 138.",
+      "landing": "https://www.ncei.noaa.gov/products/climate-data-records/precipitation-gpcp-monthly",
+      "words": {
+        "rise": "got wetter",
+        "fall": "got drier",
+        "noun": "wetting",
+        "antiNoun": "drying"
+      },
+      "relativeUnits": true
+    }
+  ]
+}

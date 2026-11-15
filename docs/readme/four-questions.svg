@@ -1,0 +1,33 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 250' width='1200' height='250' font-family='-apple-system,Segoe UI,Helvetica,Arial,sans-serif'><rect width='1200' height='250' rx='20' fill='#0d1b26'/><g transform='translate(20,20)'>
+<rect width='275' height='210' rx='18' fill='#142837' stroke='#2c4557'/>
+<rect width='275' height='210' rx='18' fill='none' stroke='#4393c3' stroke-width='2' opacity='0'><animate attributeName='opacity' values='0;1;1;0;0' keyTimes='0;.05;.22;.27;1' dur='8s' begin='0s' repeatCount='indefinite'/></rect>
+<circle cx='36' cy='40' r='16' fill='#4393c3' opacity='.18'/><text x='36' y='46' fill='#4393c3' font-size='16' font-weight='700' text-anchor='middle'>1</text>
+<text x='22' y='96' fill='#e7eef2' font-size='28' font-weight='700' letter-spacing='-1'>What</text>
+<text x='22' y='124' fill='#b2c3cd' font-size='17'>is changing?</text>
+<text x='22' y='166' fill='#7f97a5' font-size='14'>Temperature or rainfall,</text><text x='22' y='186' fill='#7f97a5' font-size='14'>any season, any years</text>
+<rect x='22' y='196' width='0' height='3' rx='1.5' fill='#4393c3'><animate attributeName='width' values='0;231;231;0' keyTimes='0;.2;.9;1' dur='8s' begin='0s' repeatCount='indefinite'/></rect>
+</g><g transform='translate(315,20)'>
+<rect width='275' height='210' rx='18' fill='#142837' stroke='#2c4557'/>
+<rect width='275' height='210' rx='18' fill='none' stroke='#4caf88' stroke-width='2' opacity='0'><animate attributeName='opacity' values='0;1;1;0;0' keyTimes='0;.05;.22;.27;1' dur='8s' begin='2s' repeatCount='indefinite'/></rect>
+<circle cx='36' cy='40' r='16' fill='#4caf88' opacity='.18'/><text x='36' y='46' fill='#4caf88' font-size='16' font-weight='700' text-anchor='middle'>2</text>
+<text x='22' y='96' fill='#e7eef2' font-size='28' font-weight='700' letter-spacing='-1'>Where</text>
+<text x='22' y='124' fill='#b2c3cd' font-size='17'>is it changing?</text>
+<text x='22' y='166' fill='#7f97a5' font-size='14'>Every grid cell, any</text><text x='22' y='186' fill='#7f97a5' font-size='14'>region, auto hotspots</text>
+<rect x='22' y='196' width='0' height='3' rx='1.5' fill='#4caf88'><animate attributeName='width' values='0;231;231;0' keyTimes='0;.2;.9;1' dur='8s' begin='2s' repeatCount='indefinite'/></rect>
+</g><g transform='translate(610,20)'>
+<rect width='275' height='210' rx='18' fill='#142837' stroke='#2c4557'/>
+<rect width='275' height='210' rx='18' fill='none' stroke='#e08214' stroke-width='2' opacity='0'><animate attributeName='opacity' values='0;1;1;0;0' keyTimes='0;.05;.22;.27;1' dur='8s' begin='4s' repeatCount='indefinite'/></rect>
+<circle cx='36' cy='40' r='16' fill='#e08214' opacity='.18'/><text x='36' y='46' fill='#e08214' font-size='16' font-weight='700' text-anchor='middle'>3</text>
+<text x='22' y='96' fill='#e7eef2' font-size='28' font-weight='700' letter-spacing='-1'>How much</text>
+<text x='22' y='124' fill='#b2c3cd' font-size='17'>is it changing?</text>
+<text x='22' y='166' fill='#7f97a5' font-size='14'>Sen's slope per decade</text><text x='22' y='186' fill='#7f97a5' font-size='14'>and total change</text>
+<rect x='22' y='196' width='0' height='3' rx='1.5' fill='#e08214'><animate attributeName='width' values='0;231;231;0' keyTimes='0;.2;.9;1' dur='8s' begin='4s' repeatCount='indefinite'/></rect>
+</g><g transform='translate(905,20)'>
+<rect width='275' height='210' rx='18' fill='#142837' stroke='#2c4557'/>
+<rect width='275' height='210' rx='18' fill='none' stroke='#d6604d' stroke-width='2' opacity='0'><animate attributeName='opacity' values='0;1;1;0;0' keyTimes='0;.05;.22;.27;1' dur='8s' begin='6s' repeatCount='indefinite'/></rect>
+<circle cx='36' cy='40' r='16' fill='#d6604d' opacity='.18'/><text x='36' y='46' fill='#d6604d' font-size='16' font-weight='700' text-anchor='middle'>4</text>
+<text x='22' y='96' fill='#e7eef2' font-size='28' font-weight='700' letter-spacing='-1'>Is it real</text>
+<text x='22' y='124' fill='#b2c3cd' font-size='17'>or just noise?</text>
+<text x='22' y='166' fill='#7f97a5' font-size='14'>Mann–Kendall + Hamed–Rao,</text><text x='22' y='186' fill='#7f97a5' font-size='14'>false discovery control</text>
+<rect x='22' y='196' width='0' height='3' rx='1.5' fill='#d6604d'><animate attributeName='width' values='0;231;231;0' keyTimes='0;.2;.9;1' dur='8s' begin='6s' repeatCount='indefinite'/></rect>
+</g></svg>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · Drift</title>
+  <meta name="description" content="How Drift answers the NASA Space Apps 2026 challenge Be an Earth System Trend Detective: data, method, and the team.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232166ac'/%3E%3Cpath d='M2 16a14 14 0 0 0 28 0z' fill='%23b2182b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV,SHRP@300..700,0,0..40&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script type="module" src="js/page.js"></script>
+</head>
+<body class="content-page">
+  <a class="skip" href="#main">Skip to the content</a>
+  <canvas class="cosmos" id="cosmos" aria-hidden="true"></canvas>
+  <canvas class="cosmos cosmos-front" id="cosmos-front" aria-hidden="true"></canvas>
+  <header class="bar">
+    <a class="mark" href="index.html" aria-label="Drift home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><path d="M3 16a13 13 0 0 0 26 0"/><path d="M6 10c6 3 14-3 20 0M5 22c6-3 16 3 22 0" class="mark-wave"/></svg>
+      <span>Drift</span>
+    </a>
+    <nav class="bar-links" aria-label="Pages"><a href="index.html#atlas">Atlas</a><a href="index.html#cases">Cases</a><a href="learn.html">Field guide</a><a href="about.html" aria-current="page">About</a><a href="slides.html">Slides</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg>
+    </button>
+    <span class="progress" id="progress" aria-hidden="true"></span>
+  </header>
+  <main class="page" id="main">
+    <section class="page-hero">
+      <p class="kicker reveal in">About Drift</p>
+      <h1 class="reveal in" style="--i:1">Built to answer<br><em class="grad">four questions.</em></h1>
+      <p class="lede reveal in" style="--i:2">The NASA Space Apps 2026 challenge "Be an Earth System Trend Detective" asks for a tool that shows what is changing, where, by how much, and whether the change is significant. Drift does all four for every grid cell on Earth, live in the browser.</p>
+      <div class="btn-row reveal in" style="--i:3"><a class="cta" href="index.html"><span>Open Drift</span></a><a class="cta-ghost" href="slides.html"><span>View the demo slides</span></a><a class="cta-ghost" href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026"><span>Source code</span></a></div>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">By the numbers</h2>
+      <div class="stats">
+        <div class="stat"><b data-count="126">0</b><span>years of NASA temperature records (1900–2025)</span></div>
+        <div class="stat"><b data-count="15919">0</b><span>trend tests computed per question</span></div>
+        <div class="stat"><b data-count="5">0</b><span>seasons to compare</span></div>
+        <div class="stat"><b data-count="4">0</b><span>statistical methods, tested against scipy and pymannkendall</span></div>
+        <div class="stat"><b data-count="0">0</b><span>servers, accounts or API keys needed</span></div>
+      </div>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">How it meets the challenge</h2>
+      <p class="sub reveal">Every requirement in the brief, and where to find it in Drift.</p>
+      <table class="reveal">
+        <thead><tr><th>The brief asks</th><th>Drift's answer</th></tr></thead>
+        <tbody>
+          <tr><td>Select variables</td><td>NASA GISTEMP v4 surface temperature and GPCP v2.3 precipitation, by season and any window of years. New datasets are added with one registry entry.</td></tr>
+          <tr><td>Acquire data for a region</td><td>Click a cell, drag a box, or pick a detected hotspot. Regional series use area weights and skip years with poor coverage.</td></tr>
+          <tr><td>Visualise change over time</td><td>Globe, Equal Earth map, year-by-year animation, climate stripes, time series with fitted trend and 95% band.</td></tr>
+          <tr><td>What, where, how much</td><td>A written answer generated from the result, the share of Earth's surface that changed, Sen's slope per decade and total change.</td></tr>
+          <tr><td>Significance</td><td>Mann–Kendall test corrected for persistence (Hamed–Rao), confidence intervals, and false discovery control across the whole map.</td></tr>
+          <tr><td>Opposite regional trends</td><td>Connected regions of robust change in both directions, plus a latitude profile.</td></tr>
+          <tr><td>Help for students</td><td>A guided tour, six detective case files, a step-by-step method explainer and a plain-language Field Guide.</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">How it works</h2>
+      <p class="sub reveal">From NASA's original files to an answer on your screen. Nothing is interpolated, filled in or pre-written.</p>
+      <svg viewBox="0 0 980 220" role="img" aria-label="Pipeline: NASA NetCDF files to yearly grids to browser workers to the atlas" style="width:100%;height:auto">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink-3)"/></marker></defs>
+<g font-family="Geologica, system-ui, sans-serif">
+<g class="reveal" style="--i:0"><rect x="10" y="50" width="170" height="120" rx="16" fill="var(--panel)" stroke="var(--rule)"/><text x="26" y="84" fill="var(--ink)" font-size="16" font-weight="600">NASA servers</text><text x="26" y="112" fill="var(--ink-2)" font-size="12">GISTEMP v4 · GPCP v2.3</text><text x="26" y="132" fill="var(--ink-3)" font-size="12">NetCDF, monthly</text><rect x="26" y="146" width="138" height="4" rx="2" fill="var(--rule)"/><rect x="26" y="146" width="138" height="4" rx="2" fill="#d6604d" opacity=".8"><animate attributeName="width" values="0;138;138" keyTimes="0;.6;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></rect></g><line x1="182" y1="110" x2="204" y2="110" stroke="var(--ink-3)" stroke-width="1.5" marker-end="url(#ar)"/><circle r="3.5" fill="#4393c3"><animateMotion dur="1.6s" begin="0.0s" repeatCount="indefinite" path="M182 110 L202 110"/></circle><g class="reveal" style="--i:1"><rect x="206" y="50" width="170" height="120" rx="16" fill="var(--panel)" stroke="var(--rule)"/><text x="222" y="84" fill="var(--ink)" font-size="16" font-weight="600">build_data.py</text><text x="222" y="112" fill="var(--ink-2)" font-size="12">months → years & seasons</text><text x="222" y="132" fill="var(--ink-3)" font-size="12">int16 grids, no infill</text><rect x="222" y="146" width="138" height="4" rx="2" fill="var(--rule)"/><rect x="222" y="146" width="138" height="4" rx="2" fill="#d6604d" opacity=".8"><animate attributeName="width" values="0;138;138" keyTimes="0;.6;1" dur="3s" begin="0.5s" repeatCount="indefinite"/></rect></g><line x1="378" y1="110" x2="400" y2="110" stroke="var(--ink-3)" stroke-width="1.5" marker-end="url(#ar)"/><circle r="3.5" fill="#4393c3"><animateMotion dur="1.6s" begin="0.3s" repeatCount="indefinite" path="M378 110 L398 110"/></circle><g class="reveal" style="--i:2"><rect x="402" y="50" width="170" height="120" rx="16" fill="var(--panel)" stroke="var(--rule)"/><text x="418" y="84" fill="var(--ink)" font-size="16" font-weight="600">Web workers</text><text x="418" y="112" fill="var(--ink-2)" font-size="12">Sen + Mann–Kendall</text><text x="418" y="132" fill="var(--ink-3)" font-size="12">~16,000 cells in parallel</text><rect x="418" y="146" width="138" height="4" rx="2" fill="var(--rule)"/><rect x="418" y="146" width="138" height="4" rx="2" fill="#d6604d" opacity=".8"><animate attributeName="width" values="0;138;138" keyTimes="0;.6;1" dur="3s" begin="1.0s" repeatCount="indefinite"/></rect></g><line x1="574" y1="110" x2="596" y2="110" stroke="var(--ink-3)" stroke-width="1.5" marker-end="url(#ar)"/><circle r="3.5" fill="#4393c3"><animateMotion dur="1.6s" begin="0.6s" repeatCount="indefinite" path="M574 110 L594 110"/></circle><g class="reveal" style="--i:3"><rect x="598" y="50" width="170" height="120" rx="16" fill="var(--panel)" stroke="var(--rule)"/><text x="614" y="84" fill="var(--ink)" font-size="16" font-weight="600">False discovery</text><text x="614" y="112" fill="var(--ink-2)" font-size="12">Benjamini–Hochberg</text><text x="614" y="132" fill="var(--ink-3)" font-size="12">q = 0.10 across the map</text><rect x="614" y="146" width="138" height="4" rx="2" fill="var(--rule)"/><rect x="614" y="146" width="138" height="4" rx="2" fill="#d6604d" opacity=".8"><animate attributeName="width" values="0;138;138" keyTimes="0;.6;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></rect></g><line x1="770" y1="110" x2="792" y2="110" stroke="var(--ink-3)" stroke-width="1.5" marker-end="url(#ar)"/><circle r="3.5" fill="#4393c3"><animateMotion dur="1.6s" begin="0.8999999999999999s" repeatCount="indefinite" path="M770 110 L790 110"/></circle><g class="reveal" style="--i:4"><rect x="794" y="50" width="170" height="120" rx="16" fill="var(--panel)" stroke="var(--rule)"/><text x="810" y="84" fill="var(--ink)" font-size="16" font-weight="600">The atlas</text><text x="810" y="112" fill="var(--ink-2)" font-size="12">globe · map · panel</text><text x="810" y="132" fill="var(--ink-3)" font-size="12">written answer, CSV</text><rect x="810" y="146" width="138" height="4" rx="2" fill="var(--rule)"/><rect x="810" y="146" width="138" height="4" rx="2" fill="#d6604d" opacity=".8"><animate attributeName="width" values="0;138;138" keyTimes="0;.6;1" dur="3s" begin="2.0s" repeatCount="indefinite"/></rect></g></g></svg>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">Data and credits</h2>
+      <div class="cards">
+        <article class="card reveal"><span class="tag">NASA data</span><h3>GISTEMP v4</h3><p>NASA Goddard Institute for Space Studies surface temperature analysis, 2° grid, anomalies vs 1951–1980. <a href="https://data.giss.nasa.gov/gistemp/">data.giss.nasa.gov/gistemp</a></p></article>
+        <article class="card reveal" style="--i:1"><span class="tag">NASA data</span><h3>GPCP v2.3</h3><p>Global Precipitation Climatology Project monthly analysis (NASA GSFC / UMD), 2.5° grid, distributed by NOAA NCEI. Adler et al., 2018.</p></article>
+        <article class="card reveal" style="--i:2"><span class="tag">Open source</span><h3>Tools</h3><p>D3 and TopoJSON (ISC), Natural Earth via world-atlas (public domain), ColorBrewer palettes, Geologica typeface (SIL OFL).</p></article>
+      </div>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">Team</h2>
+      <div class="cards">
+        <article class="card reveal"><span class="tag">Builder</span><h3>Priyanshu Sharan</h3><p>Computer Science Engineering student at BMS College of Engineering, Bengaluru. <a href="https://github.com/priyanshusharan-cmd">GitHub</a> · <a href="https://linkedin.com/in/priyanshusharan">LinkedIn</a></p></article>
+        <article class="card reveal" style="--i:1"><span class="tag">Use of AI</span><h3>How AI was used</h3><p>AI coding assistants helped write parts of the code and documentation. All scientific values come from NASA data, and the statistics are checked against independent reference libraries in the test suite.</p></article>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <div class="foot-grid">
+      <div><p class="foot-mark">Drift</p><p>An Earth trend atlas built for the NASA Space Apps Challenge 2026, "Be an Earth System Trend Detective".</p></div>
+      <nav aria-label="Pages"><a href="index.html">Atlas</a><a href="index.html#cases">Case files</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Demo slides</a><a href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026">Source on GitHub</a></nav>
+      <p class="fine">Data: NASA GISS GISTEMP v4 and GPCP v2.3. Not endorsed by NASA.</p>
+    </div>
+  </footer>
+</body>
+</html>

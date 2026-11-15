@@ -1,0 +1,12 @@
+{
+  "name": "drift",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Earth system trend atlas for NASA Space Apps 2026",
+  "scripts": {
+    "dev": "python3 scripts/serve.py 4173",
+    "test": "node --test tests/*.test.mjs",
+    "data": ".venv/bin/python scripts/build_data.py"
+  }
+}

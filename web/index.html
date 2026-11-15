@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drift · Earth trend atlas</title>
+  <meta name="description" content="Find what is changing on Earth, where, by how much, and whether it is statistically robust, from NASA climate records.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232166ac'/%3E%3Cpath d='M2 16a14 14 0 0 0 28 0z' fill='%23b2182b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV,SHRP@300..700,0,0..40&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script src="vendor/d3.min.js" defer></script>
+  <script src="vendor/topojson.min.js" defer></script>
+  <script type="module" src="js/cases.js"></script>
+  <script type="module" src="js/tour.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#atlas">Skip to the atlas</a>
+  <canvas class="cosmos" id="cosmos" aria-hidden="true"></canvas>
+
+  <header class="bar">
+    <a class="mark" href="#" aria-label="Drift, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><path d="M3 16a13 13 0 0 0 26 0"/><path d="M6 10c6 3 14-3 20 0M5 22c6-3 16 3 22 0" class="mark-wave"/></svg>
+      <span>Drift</span>
+    </a>
+    <nav class="bar-links" aria-label="Sections">
+      <a href="#atlas">Atlas</a>
+      <a href="#cases">Cases</a>
+      <a href="#record">Record</a>
+      <a href="#patterns">Patterns</a>
+      <a href="#method">Method</a>
+      <a href="learn.html">Field guide</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg>
+    </button>
+    <span class="progress" id="progress" aria-hidden="true"></span>
+  </header>
+
+  <main>
+    <!-- One map canvas for the whole story: it starts as the hero globe, moves
+         to the centre, unfolds, and lands in the atlas. Fixed to the viewport. -->
+    <div class="sky" id="sky">
+      <canvas id="globe" aria-label="Globe coloured by the trend at each grid cell. Drag to spin it; scroll to unfold it into a map." role="img"></canvas>
+    </div>
+    <canvas class="cosmos cosmos-front" id="cosmos-front" aria-hidden="true"></canvas>
+    <div class="tip globe-tip" id="globe-tip" role="status" hidden></div>
+
+    <section class="hero" id="hero" aria-labelledby="question">
+      <div class="hero-text">
+        <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>NASA Space Apps 2026 · Earth System Trend Detective</p>
+        <h1 id="question">Where is Earth <span class="nowrap"><em class="grad">changing</em>,</span> and how fast?</h1>
+        <form class="controls" id="controls" aria-label="What to analyse">
+          <div class="ctrl">
+            <span class="ctrl-label" id="lbl-dataset">Variable</span>
+            <span class="seg-host" data-label="Variable"><select id="dataset" aria-labelledby="lbl-dataset"></select></span>
+          </div>
+          <div class="ctrl">
+            <span class="ctrl-label" id="lbl-season">Season</span>
+            <span class="seg-host" data-label="Season"><select id="season" aria-labelledby="lbl-season"></select></span>
+          </div>
+          <div class="ctrl">
+            <span class="ctrl-label">Years</span>
+            <span class="years">
+              <span class="pick" data-label="First year"><select id="start"></select></span>
+              <span class="years-to" aria-hidden="true"></span>
+              <span class="pick" data-label="Last year"><select id="end"></select></span>
+            </span>
+          </div>
+        </form>
+        <p class="answer" id="answer" aria-live="polite">Reading NASA records…</p>
+        <figure class="shares" id="shares" hidden>
+          <div class="shares-bar" role="img" aria-labelledby="shares-caption">
+            <span class="s-down"></span><span class="s-flat"></span><span class="s-up"></span>
+          </div>
+          <figcaption id="shares-caption" class="shares-key"></figcaption>
+        </figure>
+        <div class="hero-foot">
+          <a class="cta" href="#atlas"><span>Explore the atlas</span></a>
+          <button type="button" class="cta-ghost" data-tour><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M8 6.5v7l6-3.5z"/></svg><span>Take the tour</span></button>
+          <p class="live" id="live" aria-live="polite"><span class="live-dot" aria-hidden="true"></span><span id="live-text">Loading NASA records…</span></p>
+        </div>
+      </div>
+      <div class="globe-slot" id="globe-slot">
+        <p class="globe-hint" id="globe-hint">Drag to spin the globe. Click a place to read it.</p>
+      </div>
+      <p class="scroll-cue" id="scroll-cue" aria-hidden="true">Scroll to unfold the globe</p>
+    </section>
+
+    <section class="story" id="story" aria-label="The globe unfolding into a map">
+      <div class="story-pin">
+        <ol class="unfold-steps" id="unfold-steps" aria-live="polite">
+          <li data-from="0.12" data-to="0.45"></li>
+          <li data-from="0.45" data-to="0.8"></li>
+          <li data-from="0.8" data-to="2"></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="atlas" id="atlas" aria-labelledby="atlas-title">
+      <div class="atlas-head">
+        <h2 id="atlas-title">Trend per decade</h2>
+        <p class="atlas-sub" id="atlas-sub"></p>
+        <div class="atlas-tools">
+          <div class="units" id="mode-group" role="radiogroup" aria-label="The map shows">
+            <label><input type="radio" name="mode" value="trend" checked><span>Trend</span></label>
+            <label><input type="radio" name="mode" value="year"><span>Year by year</span></label>
+          </div>
+          <div class="units" id="units-group" role="radiogroup" aria-label="Units" hidden>
+            <label><input type="radio" name="units" value="abs" checked><span id="units-abs">mm/day</span></label>
+            <label><input type="radio" name="units" value="rel"><span>% of mean</span></label>
+          </div>
+          <label class="toggle" id="robust-toggle"><input type="checkbox" id="robust-only" checked><span>Fade trends that aren't robust</span></label>
+        </div>
+      </div>
+
+      <div class="atlas-grid">
+        <figure class="map-figure">
+          <div class="map-wrap">
+            <canvas id="map" role="img" aria-label="World map of the trend at each grid cell"></canvas>
+            <div class="tip" id="tip" role="status" hidden></div>
+            <div class="busy" id="busy" hidden><span></span></div>
+          </div>
+          <div class="player" id="player" hidden>
+            <button type="button" class="play" id="play" aria-label="Play the years">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/></svg>
+            </button>
+            <input type="range" id="year" step="1" aria-label="Year shown on the map">
+            <output id="year-out" for="year"></output>
+          </div>
+          <figcaption class="map-foot">
+            <div class="legend" id="legend" aria-label="Colour legend"></div>
+            <p class="map-help">Click a cell to read it, or drag across the map to outline a region.</p>
+          </figcaption>
+          <div class="timeline-wrap">
+            <p class="timeline-label" id="timeline-label"></p>
+            <div id="timeline"></div>
+          </div>
+        </figure>
+
+        <aside class="place spot" id="place" aria-live="polite" aria-labelledby="place-name">
+          <p class="place-kind" id="place-kind">Whole globe</p>
+          <h3 id="place-name">Global average</h3>
+          <p class="place-coords" id="place-coords"></p>
+          <p class="place-verdict" id="place-verdict"></p>
+          <div class="place-chart" id="place-chart"></div>
+          <dl class="place-stats" id="place-stats"></dl>
+          <div class="place-actions">
+            <button type="button" id="reset-place" hidden>Back to the global average</button>
+            <button type="button" id="download">Download this series (CSV)</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cases" id="cases" aria-labelledby="cases-title">
+      <div class="cases-head">
+        <p class="kicker reveal">Detective case files</p>
+        <h2 id="cases-title" class="reveal" style="--i: 1">Six mysteries in the NASA record</h2>
+        <p class="cases-sub reveal" style="--i: 2">Each case opens the live analysis on a real question, with a hint about what to look for. The verdict comes from the data, not from us.</p>
+      </div>
+      <ol class="case-grid" id="case-grid"></ol>
+    </section>
+
+    <section class="record" id="record" aria-labelledby="record-title">
+      <div class="record-head">
+        <p class="kicker reveal">The record</p>
+        <h2 id="record-title" class="reveal" style="--i: 1">One stripe per year</h2>
+        <p class="record-sub reveal" id="record-sub" style="--i: 2"></p>
+      </div>
+      <div class="stripes" id="stripes" role="img" aria-labelledby="record-title record-sub"></div>
+      <p class="stripes-read" id="stripes-read" aria-live="polite"></p>
+      <div class="ticker" aria-label="Strongest regions in the current result">
+        <div class="ticker-track" id="ticker"></div>
+      </div>
+    </section>
+
+    <section class="patterns" id="patterns" aria-labelledby="patterns-title">
+      <h2 id="patterns-title" class="reveal">Patterns in the field</h2>
+      <div class="patterns-grid">
+        <figure class="zonal reveal">
+          <h3>By latitude</h3>
+          <p class="fig-note">Average trend along each band of latitude. Paler bars are bands where few cells have a robust trend.</p>
+          <div id="zonal"></div>
+        </figure>
+        <div class="hotspots reveal" style="--i: 1">
+          <h3>Where change is strongest</h3>
+          <p class="fig-note" id="hotspot-note"></p>
+          <ol class="hotspot-list" id="hotspots"></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" id="method" aria-labelledby="method-title">
+      <h2 id="method-title" class="reveal">How Drift reads a place</h2>
+      <p class="method-for reveal" id="explain-for"></p>
+      <ol class="explain" id="explain">
+        <li class="spot" style="--i: 0">
+          <h3>One value per year</h3>
+          <div class="explain-fig"></div>
+          <p class="explain-text"></p>
+        </li>
+        <li class="spot" style="--i: 1">
+          <h3>Every pair of years votes</h3>
+          <div class="explain-fig"></div>
+          <p class="explain-text"></p>
+        </li>
+        <li class="spot" style="--i: 2">
+          <h3>Could it be chance?</h3>
+          <div class="explain-fig"></div>
+          <p class="explain-text"></p>
+        </li>
+        <li class="spot" style="--i: 3">
+          <h3>Thousands of tests at once</h3>
+          <div class="explain-fig"></div>
+          <p class="explain-text"></p>
+        </li>
+      </ol>
+      <div class="method-notes reveal">
+        <div>
+          <h3>Data</h3>
+          <div id="sources"></div>
+        </div>
+        <div>
+          <h3>Reading it carefully</h3>
+          <p>A robust trend means the change is unlikely to be noise. It does not say why it happened. Gridded records smooth over local detail, and early decades rest on fewer observations, so cells with data in fewer than 70% of the chosen years are left blank.</p>
+          <p>Trends are Sen's slopes with Mann–Kendall tests corrected for persistence (Hamed &amp; Rao, 1998); the map controls the false discovery rate at 10% (Benjamini &amp; Hochberg, 1995; Wilks, 2016); shifts are found with the Pettitt test. Regions average cells with cos(latitude) weights and skip years with under 80% coverage.</p>
+          <p class="fine" id="build-info"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div><p class="foot-mark">Drift</p><p>An Earth trend atlas built for the NASA Space Apps Challenge 2026, "Be an Earth System Trend Detective".</p></div>
+      <nav aria-label="Pages"><a href="#atlas">Atlas</a><a href="#cases">Case files</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Demo slides</a><a href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026">Source on GitHub</a></nav>
+      <p class="fine">Data: NASA GISS GISTEMP v4 and GPCP v2.3. Not endorsed by NASA.</p>
+    </div>
+  </footer>
+
+  <noscript><p class="noscript">Drift needs JavaScript to compute trends in your browser.</p></noscript>
+</body>
+</html>

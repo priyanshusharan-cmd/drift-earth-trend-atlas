@@ -1,0 +1,16 @@
+{
+ "datasets": [
+  {
+   "id": "gistemp",
+   "name": "surface temperature",
+   "title": "Surface temperature anomaly",
+   "product": "NASA GISTEMP v4"
+  },
+  {
+   "id": "gpcp",
+   "name": "precipitation",
+   "title": "Precipitation rate",
+   "product": "GPCP v2.3 monthly"
+  }
+ ]
+}

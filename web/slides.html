@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drift · Demo slides · NASA Space Apps 2026</title>
+  <meta name="description" content="Seven-slide demo of Drift, an Earth trend atlas for the NASA Space Apps 2026 challenge Be an Earth System Trend Detective.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232166ac'/%3E%3Cpath d='M2 16a14 14 0 0 0 28 0z' fill='%23b2182b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV,SHRP@300..700,0,0..40&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0d1b26; --panel:#142837; --ink:#e7eef2; --ink2:#b2c3cd; --ink3:#7f97a5; --rule:#2c4557; --warm:#d6604d; --cool:#4393c3;
+      --grad: linear-gradient(100deg, #92c5de, #d1e5f0 22%, #f4a582 46%, #d6604d 68%, #92c5de); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #060e15; color: var(--ink); font-family: Geologica, system-ui, sans-serif; overflow: hidden; }
+    .deck { position: fixed; inset: 0; display: grid; place-items: center; }
+    .slide { position: absolute; width: min(100vw, 177.78vh); aspect-ratio: 16 / 9; background: radial-gradient(1200px 600px at 80% -10%, rgba(56,120,210,.25), transparent 60%), radial-gradient(900px 500px at -10% 110%, rgba(214,96,77,.16), transparent 60%), var(--bg);
+      padding: 5.2% 6%; display: grid; overflow: hidden; opacity: 0; transform: scale(.97) translateY(1.5%); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1); pointer-events: none; font-size: min(1.6vw, 2.85vh); }
+    .slide.on { opacity: 1; transform: none; pointer-events: auto; }
+    .slide .anim { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--i, 0) * 110ms + 150ms); }
+    .slide.on .anim { opacity: 1; transform: none; }
+    .kick { font-size: .7em; letter-spacing: .18em; text-transform: uppercase; color: var(--ink3); display: flex; gap: .8em; align-items: center; margin: 0 0 .8em; }
+    .kick::before { content: ""; width: 2em; height: 1px; background: var(--grad); }
+    h1 { font-size: 4.6em; line-height: .98; letter-spacing: -.04em; margin: 0; }
+    h2 { font-size: 2.5em; line-height: 1.05; letter-spacing: -.03em; margin: 0 0 .5em; }
+    h3 { font-size: 1.05em; margin: 0 0 .3em; }
+    p { margin: 0; color: var(--ink2); line-height: 1.45; }
+    .grad { background: var(--grad); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: g 6s linear infinite alternate; font-style: normal; }
+    @keyframes g { to { background-position: 100% 50%; } }
+    .two { display: grid; grid-template-columns: 1fr 1.25fr; gap: 4%; align-items: center; }
+    .shot { width: 100%; border-radius: 1em; border: 1px solid var(--rule); box-shadow: 0 2em 4em -2em rgba(0,0,0,.7); display: block; }
+    .list { display: grid; gap: .9em; margin-top: 1.2em; }
+    .item { display: grid; grid-template-columns: 2.4em 1fr; gap: .8em; align-items: start; }
+    .num { width: 2.4em; height: 2.4em; border-radius: .8em; display: grid; place-items: center; font-weight: 600; background: var(--panel); border: 1px solid var(--rule); color: var(--ink); }
+    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-top: 1em; }
+    .card { padding: 1.1em; border-radius: 1em; background: var(--panel); border: 1px solid var(--rule); }
+    .card .big { font-size: 1.9em; font-weight: 600; letter-spacing: -.03em; color: var(--ink); display: block; margin-bottom: .2em; }
+    .card p { font-size: .82em; }
+    .mini { gap: .6em; } .mini .card { padding: .8em; } .mini .big { font-size: 1.15em; }
+    .foot { position: absolute; left: 6%; right: 15%; bottom: 3.2%; display: flex; justify-content: space-between; font-size: .62em; color: var(--ink3); }
+    .bar { position: fixed; left: 0; bottom: 0; height: 3px; background: var(--grad); transition: width .5s; z-index: 5; }
+    .nav { position: fixed; right: 18px; bottom: 14px; display: flex; gap: 8px; z-index: 5; }
+    .nav button, .nav a { font: inherit; font-size: 13px; background: rgba(20,40,55,.8); color: var(--ink); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 14px; cursor: pointer; text-decoration: none; }
+    .globe { width: 100%; max-width: 30em; justify-self: end; }
+    .globe circle.o { fill: none; stroke: var(--rule); }
+    .wave { stroke-dasharray: 8 6; animation: flow 3s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -28; } }
+    .spin { transform-origin: 200px 200px; animation: spin 40s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pulse { animation: pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
+    .cta { display: inline-block; margin-top: 1.4em; padding: .7em 1.3em; border-radius: 999px; background: var(--ink); color: var(--bg); text-decoration: none; font-weight: 600; }
+    .links p { margin-top: .4em; }
+    .links a { color: #8cc8ff; }
+    @media print {
+      @page { size: 1600px 900px; margin: 0; }
+      html, body { overflow: visible; height: auto; background: var(--bg); }
+      .deck { position: static; display: block; }
+      .slide { position: relative; width: 1600px; height: 900px; opacity: 1 !important; transform: none !important; page-break-after: always; font-size: 25.6px; }
+      .slide .anim { opacity: 1 !important; transform: none !important; }
+      .nav, .bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1. Title -->
+  <section class="slide on" aria-label="Slide 1 of 7: title">
+    <div class="two">
+      <div>
+        <p class="kick anim">NASA Space Apps 2026 · Earth System Trend Detective</p>
+        <h1 class="anim" style="--i:1">Drift<br><em class="grad">Earth trend atlas</em></h1>
+        <p class="anim" style="--i:2; margin-top:1.2em; font-size:1.15em; max-width: 26em">What is changing on Earth, where, by how much, and is it real? Answered live from NASA records, for every place on the planet.</p>
+        <p class="anim" style="--i:3; margin-top:1.4em; color:var(--ink3)">Priyanshu Sharan · BMS College of Engineering, Bengaluru</p>
+      </div>
+      <svg class="globe anim" style="--i:2" viewBox="0 0 400 400" aria-hidden="true">
+        <defs><radialGradient id="gg" cx="35%" cy="30%"><stop offset="0" stop-color="#f4a582"/><stop offset=".55" stop-color="#d6604d"/><stop offset="1" stop-color="#67001f"/></radialGradient></defs>
+        <circle cx="200" cy="200" r="190" class="o" stroke-dasharray="3 7"/>
+        <circle cx="200" cy="200" r="150" fill="url(#gg)" opacity=".92"/>
+        <g class="spin" fill="none" stroke="rgba(255,255,255,.28)">
+          <ellipse cx="200" cy="200" rx="150" ry="55"/><ellipse cx="200" cy="200" rx="150" ry="110"/><ellipse cx="200" cy="200" rx="55" ry="150"/><ellipse cx="200" cy="200" rx="110" ry="150"/>
+        </g>
+        <path class="wave" d="M70 170c40 20 90-20 130 0s90 20 130 0" stroke="#92c5de" stroke-width="3" fill="none"/>
+        <path class="wave" d="M70 240c40-20 90 20 130 0s90-20 130 0" stroke="#fddbc7" stroke-width="3" fill="none" style="animation-duration:4s"/>
+        <circle cx="262" cy="118" r="9" fill="#ffd166"/><circle cx="262" cy="118" r="9" fill="none" stroke="#ffd166" stroke-width="2" class="pulse"/>
+      </svg>
+    </div>
+    <div class="foot"><span>Drift · priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026</span><span>1 / 7</span></div>
+  </section>
+
+  <!-- 2. Problem -->
+  <section class="slide" aria-label="Slide 2 of 7: the problem">
+    <div class="two">
+      <div>
+        <p class="kick anim">The problem</p>
+        <h2 class="anim" style="--i:1">Climate data is noisy, huge and easy to misread.</h2>
+        <div class="list">
+          <div class="item anim" style="--i:2"><span class="num">1</span><div><h3>Too many places, too many variables</h3><p>A single variable can rise in one region and fall in another, even when one process drives both.</p></div></div>
+          <div class="item anim" style="--i:3"><span class="num">2</span><div><h3>Noise looks like a trend</h3><p>Weather, El Niño and persistent years make chance patterns look real.</p></div></div>
+          <div class="item anim" style="--i:4"><span class="num">3</span><div><h3>Thousands of tests, many false alarms</h3><p>Test 16,000 places at 5% and about 800 will "pass" by luck alone.</p></div></div>
+        </div>
+      </div>
+      <img class="shot anim" style="--i:2" src="assets/rain.jpg" alt="Drift map of precipitation trends, showing wetting and drying regions side by side">
+    </div>
+    <div class="foot"><span>Precipitation trends 1979–2025, NASA/GPCP v2.3</span><span>2 / 7</span></div>
+  </section>
+
+  <!-- 3. Solution -->
+  <section class="slide" aria-label="Slide 3 of 7: the solution">
+    <div class="two">
+      <div>
+        <p class="kick anim">Our solution</p>
+        <h2 class="anim" style="--i:1">Ask a question. Get a tested answer in two seconds.</h2>
+        <p class="anim" style="--i:2">Pick a NASA variable, a season and any window of years. Drift recomputes a trend and a significance test for every grid cell on Earth, right in the browser, and writes the answer in plain language.</p>
+        <div class="grid4 mini">
+          <div class="card anim" style="--i:3"><span class="big">~16,000</span><p>trends and tests per question</p></div>
+          <div class="card anim" style="--i:4"><span class="big">1900–2025</span><p>NASA GISTEMP v4 temperature</p></div>
+          <div class="card anim" style="--i:5"><span class="big">1979–2025</span><p>GPCP v2.3 precipitation</p></div>
+          <div class="card anim" style="--i:6"><span class="big">0</span><p>servers, accounts or keys</p></div>
+        </div>
+      </div>
+      <img class="shot anim" style="--i:2" src="assets/hero.jpg" alt="Drift home screen: a globe coloured by temperature trend and a written answer">
+    </div>
+    <div class="foot"><span>The written answer and every number come from the live result</span><span>3 / 7</span></div>
+  </section>
+
+  <!-- 4. Four questions -->
+  <section class="slide" aria-label="Slide 4 of 7: the four questions">
+    <div>
+      <p class="kick anim">Answering the challenge</p>
+      <h2 class="anim" style="--i:1">What, where, how much, and is it <em class="grad">significant?</em></h2>
+      <div class="two" style="grid-template-columns: 1.35fr 1fr; margin-top:.4em">
+        <img class="shot anim" style="--i:2" src="assets/atlas.jpg" alt="The Arctic selected in Drift: +0.70 °C per decade, significant">
+        <div class="list" style="margin:0">
+          <div class="item anim" style="--i:3"><span class="num">?</span><div><h3>What</h3><p>Temperature or rainfall, by season, over any years.</p></div></div>
+          <div class="item anim" style="--i:4"><span class="num">⌖</span><div><h3>Where</h3><p>Every cell mapped; click a place, drag a region or pick a hotspot.</p></div></div>
+          <div class="item anim" style="--i:5"><span class="num">↗</span><div><h3>How much</h3><p>The Arctic: +0.70 °C per decade, over 3× the global +0.22.</p></div></div>
+          <div class="item anim" style="--i:6"><span class="num">✓</span><div><h3>Significant?</h3><p>p-value, 95% band and false discovery control; weak trends fade.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Case 01 in Drift: the Arctic, 1981–2025, NASA GISTEMP v4</span><span>4 / 7</span></div>
+  </section>
+
+  <!-- 5. Method -->
+  <section class="slide" aria-label="Slide 5 of 7: the method">
+    <div>
+      <p class="kick anim">The science</p>
+      <h2 class="anim" style="--i:1">Robust statistics, tested against reference libraries.</h2>
+      <div class="grid4">
+        <div class="card anim" style="--i:2"><span class="big">Sen</span><p>Median of all pairwise slopes. One freak year can't drag the answer.</p></div>
+        <div class="card anim" style="--i:3"><span class="big">Mann–Kendall</span><p>Rank-based trend test, corrected for persistent years (Hamed &amp; Rao, 1998).</p></div>
+        <div class="card anim" style="--i:4"><span class="big">FDR</span><p>Benjamini–Hochberg at q = 0.10 keeps false alarms in check across the map.</p></div>
+        <div class="card anim" style="--i:5"><span class="big">Pettitt</span><p>Finds the year a record jumped, so a step isn't mistaken for a trend.</p></div>
+      </div>
+      <img class="shot anim" style="--i:4; margin-top:1.2em; height: 8.5em; object-fit: cover; object-position: center 62%" src="assets/method.jpg" alt="How Drift reads a place: four animated steps">
+    </div>
+    <div class="foot"><span>Verified against scipy.stats.theilslopes and pymannkendall in the test suite</span><span>5 / 7</span></div>
+  </section>
+
+  <!-- 6. For students -->
+  <section class="slide" aria-label="Slide 6 of 7: built for learners">
+    <div class="two">
+      <div>
+        <p class="kick anim">Built for learners</p>
+        <h2 class="anim" style="--i:1">Become an Earth data detective.</h2>
+        <div class="list">
+          <div class="item anim" style="--i:2"><span class="num">6</span><div><h3>Detective case files</h3><p>Arctic warming, Siberian winters, the Atlantic cold blob, India's monsoon, the Sahel, the Pacific.</p></div></div>
+          <div class="item anim" style="--i:3"><span class="num">10</span><div><h3>Step guided tour</h3><p>A spotlight walks first-time users through every part of the atlas.</p></div></div>
+          <div class="item anim" style="--i:4"><span class="num">12</span><div><h3>Animated Field Guide terms</h3><p>Anomaly, Sen's slope, p-value, persistence, false discovery rate, in plain words.</p></div></div>
+        </div>
+      </div>
+      <img class="shot anim" style="--i:2" src="assets/cases.jpg" alt="Six detective case file cards in Drift">
+    </div>
+    <div class="foot"><span>Every case opens the live analysis; the verdict comes from the data</span><span>6 / 7</span></div>
+  </section>
+
+  <!-- 7. Impact -->
+  <section class="slide" aria-label="Slide 7 of 7: impact and links">
+    <div class="two">
+      <div>
+        <p class="kick anim">Impact</p>
+        <h2 class="anim" style="--i:1">Trustworthy climate answers, for anyone with a browser.</h2>
+        <p class="anim" style="--i:2">Students, teachers and curious people can test claims about climate themselves, see where change is real, and understand why some patterns are just noise.</p>
+        <p class="anim" style="--i:3; margin-top: 1em"><b style="color:var(--ink)">Next:</b> more NASA variables (MERRA-2, GLDAS, MODIS), custom region shapes, and classroom worksheets.</p>
+        <a class="cta anim" style="--i:4" href="index.html">Try Drift live →</a>
+      </div>
+      <div class="links">
+        <div class="card anim" style="--i:3"><h3>Live app</h3><p><a href="index.html">priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026</a></p></div>
+        <div class="card anim" style="--i:4; margin-top:1em"><h3>Source code</h3><p><a href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026">github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026</a></p></div>
+        <div class="card anim" style="--i:5; margin-top:1em"><h3>NASA data</h3><p>GISTEMP v4 (NASA GISS) · GPCP v2.3 (NASA GSFC / UMD)</p></div>
+      </div>
+    </div>
+    <div class="foot"><span>Drift is not endorsed by NASA</span><span>7 / 7</span></div>
+  </section>
+</div>
+<div class="bar" id="bar"></div>
+<div class="nav"><a href="index.html">Open Drift</a><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
+<script>
+  const slides = [...document.querySelectorAll(".slide")];
+  let i = Math.max(0, Math.min(slides.length - 1, (parseInt(location.hash.slice(1)) || 1) - 1));
+  function go(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("on", k === i));
+    document.getElementById("bar").style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, "", `#${i + 1}`);
+  }
+  document.getElementById("next").onclick = () => go(i + 1);
+  document.getElementById("prev").onclick = () => go(i - 1);
+  addEventListener("keydown", (e) => {
+    if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(i + 1); }
+    if (["ArrowLeft", "PageUp"].includes(e.key)) go(i - 1);
+  });
+  let x0 = null;
+  addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener("touchend", (e) => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); x0 = null; });
+  addEventListener("hashchange", () => { const n = (parseInt(location.hash.slice(1)) || 1) - 1; if (n !== i) go(n); });
+  go(i);
+</script>
+</body>
+</html>
