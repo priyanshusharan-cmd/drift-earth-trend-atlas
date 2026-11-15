@@ -134,14 +134,14 @@ function bindControls() {
 }
 
 // ---------------------------------------------------------------- loading
-async function switchDataset(id) {
+async function switchDataset(id, keep = false) {
   const s = app.state;
   const prev = app.meta;
   app.meta = await loadMeta(id);
   app.g = grid(app.meta);
   s.ds = id;
   if (!app.meta.seasons[s.season]) s.season = "annual";
-  if (prev && prev.id !== id) { s.start = null; s.end = null; s.sel = { type: "globe" }; }
+  if (!keep && prev && prev.id !== id) { s.start = null; s.end = null; s.sel = { type: "globe" }; }
   if (!app.meta.relativeUnits) s.units = "abs";
   clampWindow();
   app.names.clear();
@@ -1076,6 +1076,27 @@ function globeGeometry() {
 // ---------------------------------------------------------------- boot
 const makeWorker = () => new Worker(new URL("./worker.js", import.meta.url), { type: "module" });
 
+// Apply the URL's state without reloading: used by case links and edited URLs.
+async function applyHash() {
+  if (!app.meta) return;
+  const s = app.state;
+  s.sel = { type: "globe" }; s.units = "abs"; s.robustOnly = true;
+  readHash();
+  if (!app.catalog.datasets.some((d) => d.id === s.ds)) s.ds = app.meta.id;
+  const dsSel = $("dataset");
+  for (const o of dsSel.options) o.toggleAttribute("selected", o.value === s.ds);
+  dsSel.value = s.ds;
+  $("robust-only").checked = s.robustOnly;
+  if (app.state.mode !== "trend") {
+    document.querySelector('input[name="mode"][value="trend"]').checked = true;
+    setMode("trend");
+  }
+  await switchDataset(s.ds, true);
+  const geom = selectionGeometry(s.sel);
+  app.flat.setSelection(geom);
+  app.globe.setSelection(geom);
+}
+
 async function boot() {
   initTheme();
   readHash();
@@ -1126,8 +1147,8 @@ async function boot() {
   }
 
   // State changes made in the app use replaceState, so this fires only for a
-  // pasted or edited link; rebuilding from it is the simplest correct response.
-  window.addEventListener("hashchange", () => location.reload());
+  // followed link (a case file) or an edited URL. Apply it in place.
+  window.addEventListener("hashchange", applyHash);
 
   let resizeTimer;
   window.addEventListener("resize", () => {

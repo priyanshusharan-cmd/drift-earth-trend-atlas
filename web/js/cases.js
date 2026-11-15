@@ -70,12 +70,15 @@ function renderCases() {
     </li>`).join("");
 }
 
-// A case link changes the hash, and Drift rebuilds itself from the hash.
-// Read the case id now, before Drift rewrites the hash without it.
-function showActiveCase() {
+// A case link changes the hash; Drift applies it in place (no reload). This
+// shows the case file and brings the atlas into view while it recomputes.
+function caseFromHash() {
   const id = new URLSearchParams(location.hash.slice(1)).get("k");
-  const c = CASES.find((x) => x.id === id);
-  if (!c) return;
+  return CASES.find((x) => x.id === id);
+}
+
+function showCase(c) {
+  document.querySelector(".case-banner")?.remove();
   const card = document.createElement("aside");
   card.className = "case-banner";
   card.setAttribute("role", "status");
@@ -85,25 +88,42 @@ function showActiveCase() {
     <h3>${c.title}</h3>
     <p>${c.question}</p>
     <p class="case-look"><strong>What to look for.</strong> ${c.look}</p>
-    <a class="case-go" href="#atlas">See the evidence <span aria-hidden="true">↓</span></a>`;
+    <a class="case-go" href="#atlas">See the evidence <span aria-hidden="true">↑</span></a>`;
   document.body.append(card);
   requestAnimationFrame(() => card.classList.add("in"));
-  // Jump to the evidence once Drift has computed the case.
-  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-  const live = document.getElementById("live-text");
-  const go = () => document.getElementById("atlas").scrollIntoView({ behavior: "smooth" });
-  const watch = new MutationObserver(() => {
-    if (/trends computed/i.test(live.textContent)) { watch.disconnect(); setTimeout(go, 600); }
-  });
-  if (live) watch.observe(live, { childList: true, subtree: true, characterData: true });
   card.querySelector(".case-close").addEventListener("click", () => {
     card.classList.remove("in");
     setTimeout(() => card.remove(), 400);
   });
   card.querySelector(".case-go").addEventListener("click", (e) => {
     e.preventDefault();
-    document.getElementById("atlas").scrollIntoView({ behavior: "smooth" });
+    toAtlas();
   });
+}
+
+const toAtlas = () => document.getElementById("atlas").scrollIntoView({ behavior: "smooth", block: "start" });
+
+// Clicking a case card: the hash change applies the analysis, we scroll now.
+document.getElementById("case-grid")?.addEventListener("click", (e) => {
+  const a = e.target.closest(".case-link");
+  if (!a) return;
+  const id = new URLSearchParams(a.hash.slice(1)).get("k");
+  const c = CASES.find((x) => x.id === id);
+  if (c) { showCase(c); toAtlas(); }
+});
+
+// Opening a shared case link: wait for the first result, then scroll.
+function showActiveCase() {
+  const c = caseFromHash();
+  if (!c) return;
+  showCase(c);
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  const live = document.getElementById("live-text");
+  if (!live) return;
+  const watch = new MutationObserver(() => {
+    if (/trends computed/i.test(live.textContent)) { watch.disconnect(); setTimeout(toAtlas, 500); }
+  });
+  watch.observe(live, { childList: true, subtree: true, characterData: true });
 }
 
 renderCases();
