@@ -4,11 +4,11 @@
 
 ### Find what is changing on Earth, where, by how much, and whether it is real.
 
-[**Open Drift live**](https://priyanshusharan-cmd.github.io/drift-earth-atlas/) ·
-[Demo slides](https://priyanshusharan-cmd.github.io/drift-earth-atlas/slides.html) ·
-[30-second video](https://priyanshusharan-cmd.github.io/drift-earth-atlas/demo.html) ·
-[Point lab](https://priyanshusharan-cmd.github.io/drift-earth-atlas/points.html) ·
-[Field guide](https://priyanshusharan-cmd.github.io/drift-earth-atlas/learn.html)
+[**Open Drift live**](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/) ·
+[Demo slides](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/slides.html) ·
+[30-second video](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/demo.html) ·
+[Point lab](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/points.html) ·
+[Field guide](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/learn.html)
 
 ![NASA Space Apps 2026](https://img.shields.io/badge/NASA%20Space%20Apps-2026-0b3d91?style=flat-square)
 ![Challenge](https://img.shields.io/badge/challenge-Earth%20System%20Trend%20Detective-d6604d?style=flat-square)
@@ -72,7 +72,7 @@ Each case is an ordinary Drift link, so the verdict always comes from the live c
 
 <img src="docs/readme/point-lab.svg" width="100%" alt="Eight sparklines of NASA POWER air temperature from 1984 to 2024 with Sen's slope lines">
 
-The [Point lab](https://priyanshusharan-cmd.github.io/drift-earth-atlas/points.html) adds two more variables the atlas doesn't have, relative humidity and wind speed, from NASA's [POWER](https://power.larc.nasa.gov/) service, which draws on the MERRA-2 reanalysis named in the challenge brief. Pick a variable, a season and a window. Drift computes day-weighted yearly means from the monthly values, tests every place, and controls false discoveries across all eight.
+The [Point lab](https://priyanshusharan-cmd.github.io/drift-earth-trend-atlas/points.html) adds two more variables the atlas doesn't have, relative humidity and wind speed, from NASA's [POWER](https://power.larc.nasa.gov/) service, which draws on the MERRA-2 reanalysis named in the challenge brief. Pick a variable, a season and a window. Drift computes day-weighted yearly means from the monthly values, tests every place, and controls false discoveries across all eight.
 
 | Place | Why it's interesting |
 |---|---|
@@ -126,8 +126,8 @@ To add a dataset, add an entry to `datasets.json` (a single NetCDF URL or a dire
 ## Run it locally
 
 ```sh
-git clone https://github.com/priyanshusharan-cmd/drift-earth-atlas
-cd drift-earth-atlas
+git clone https://github.com/priyanshusharan-cmd/drift-earth-trend-atlas
+cd drift-earth-trend-atlas
 npm run dev        # http://localhost:4173
 npm test           # statistics tests
 ```
