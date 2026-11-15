@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Point lab · Drift</title>
+  <meta name="description" content="Trend tests on NASA POWER (MERRA-2) records at eight places: temperature, rainfall, humidity and wind, 1984–2024.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232166ac'/%3E%3Cpath d='M2 16a14 14 0 0 0 28 0z' fill='%23b2182b'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV,SHRP@300..700,0,0..40&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script src="vendor/d3.min.js"></script>
+  <script src="vendor/topojson.min.js"></script>
+  <script type="module" src="js/page.js"></script>
+  <script type="module" src="js/points.js"></script>
+</head>
+<body class="content-page">
+  <a class="skip" href="#main">Skip to the content</a>
+  <canvas class="cosmos" id="cosmos" aria-hidden="true"></canvas>
+  <canvas class="cosmos cosmos-front" id="cosmos-front" aria-hidden="true"></canvas>
+  <header class="bar">
+    <a class="mark" href="index.html" aria-label="Drift home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><path d="M3 16a13 13 0 0 0 26 0"/><path d="M6 10c6 3 14-3 20 0M5 22c6-3 16 3 22 0" class="mark-wave"/></svg>
+      <span>Drift</span>
+    </a>
+    <nav class="bar-links" aria-label="Pages"><a href="index.html#atlas">Atlas</a><a href="index.html#cases">Cases</a><a href="points.html" aria-current="page">Point lab</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Slides</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg>
+    </button>
+    <span class="progress" id="progress" aria-hidden="true"></span>
+  </header>
+  <main class="page" id="main">
+    <section class="page-hero">
+      <p class="kicker reveal in">Point lab · NASA POWER</p>
+      <h1 class="reveal in" style="--i:1">Eight places.<br><em class="grad">Four variables.</em></h1>
+      <p class="lede reveal in" style="--i:2">NASA POWER serves MERRA-2 reanalysis and satellite-derived records for any point on Earth. Compare how temperature, rainfall, humidity and wind are changing at eight very different places, with the same trend tests as the atlas.</p>
+      <div class="pl-controls reveal in" style="--i:3">
+        <div class="pl-ctrl"><span>Variable</span><div class="pl-seg" id="pl-var"></div></div>
+        <div class="pl-ctrl"><span>Season</span><div class="pl-seg" id="pl-season"></div></div>
+        <div class="pl-ctrl"><span>Years</span><div class="pl-years"><select id="pl-start" aria-label="First year"></select><span aria-hidden="true">to</span><select id="pl-end" aria-label="Last year"></select></div></div>
+      </div>
+      <p class="pl-summary reveal in" id="pl-summary" aria-live="polite" style="--i:4">Loading NASA POWER records…</p>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">Every place at a glance</h2>
+      <p class="sub reveal">Each line is one value per year. The straight line is Sen's slope; colour means the trend survives the false discovery test across all eight places. Click a card to look closer.</p>
+      <ol class="pl-cards" id="pl-cards"></ol>
+    </section>
+    <section class="page-section pl-detail-wrap" id="pl-detail">
+      <div class="pl-detail">
+        <div class="pl-detail-main">
+          <p class="kicker">Selected place</p>
+          <h2 id="pl-d-name">–</h2>
+          <p class="pl-coords" id="pl-d-coords"></p>
+          <p class="pl-d-verdict" id="pl-d-verdict"></p>
+          <svg class="pl-chart" id="pl-d-chart" role="img" aria-label="Yearly values with the trend line, its 95% band and any change point"></svg>
+          <p class="fig-note">Shaded: the years you chose. Dashed line: the most likely change point, shown when the Pettitt test finds one.</p>
+        </div>
+        <aside class="pl-detail-side">
+          <dl class="place-stats" id="pl-d-stats"></dl>
+          <div class="pl-actions"><button type="button" class="cta-ghost" id="pl-download">Download CSV</button><a class="cta-ghost" id="pl-d-atlas" href="index.html">Open this place in the atlas</a></div>
+        </aside>
+      </div>
+    </section>
+    <section class="page-section">
+      <div class="pl-two">
+        <figure class="pl-fig reveal"><h3>Where they are</h3><p class="fig-note">Pins are coloured by the trend. Grey means no robust trend.</p><svg id="pl-map" class="pl-mapsvg" role="img" aria-label="World map with the eight places"></svg></figure>
+        <figure class="pl-fig reveal" style="--i:1"><h3>Ranked by rate of change</h3><p class="fig-note">Bars are Sen's slope per decade; thin lines are the 95% range.</p><svg id="pl-rank" class="pl-ranksvg" role="img" aria-label="Places ranked by trend per decade"></svg></figure>
+      </div>
+    </section>
+    <section class="page-section">
+      <h2 class="reveal">About this data</h2>
+      <div class="cards">
+        <article class="card reveal"><span class="tag">NASA data</span><h3>NASA POWER</h3><p>Prediction Of Worldwide Energy Resources, NASA Langley Research Center. Monthly point values from MERRA-2 and POWER sources, v2.10. <a href="https://power.larc.nasa.gov/">power.larc.nasa.gov</a></p></article>
+        <article class="card reveal" style="--i:1"><span class="tag">Model</span><h3>MERRA-2</h3><p>NASA GMAO's Modern-Era Retrospective analysis for Research and Applications, one of the global models named in the challenge brief.</p></article>
+        <article class="card reveal" style="--i:2"><span class="tag">Method</span><h3>Same tests as the atlas</h3><p>Day-weighted yearly and seasonal means (every month required), Sen's slope, Mann–Kendall with Hamed–Rao correction, Benjamini–Hochberg across the eight places, Pettitt change points.</p></article>
+      </div>
+      <p class="fine" style="margin-top:18px">Retrieved from the NASA POWER monthly point API on <span id="pl-retrieved"></span>. Each point is a model grid cell, not a weather station or a regional average.</p>
+    </section>
+  </main>
+  <footer class="foot">
+    <div class="foot-grid">
+      <div><p class="foot-mark">Drift</p><p>An Earth trend atlas built for the NASA Space Apps Challenge 2026, "Be an Earth System Trend Detective".</p></div>
+      <nav aria-label="Pages"><a href="index.html">Atlas</a><a href="index.html#cases">Case files</a><a href="points.html">Point lab</a><a href="learn.html">Field guide</a><a href="about.html">About</a><a href="slides.html">Demo slides</a><a href="https://github.com/priyanshusharan-cmd/nasa-space-app-challenge-2026">Source on GitHub</a></nav>
+      <p class="fine">Data: NASA GISS GISTEMP v4 and GPCP v2.3. Not endorsed by NASA.</p>
+    </div>
+  </footer>
+</body>
+</html>

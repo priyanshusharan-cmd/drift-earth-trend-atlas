@@ -185,3 +185,58 @@
 @media (prefers-reduced-motion: reduce) {
   .ci *, .draw, .pop, .sweep, .blink, .swing, .rise, .tour-hole::after, .case-go span { animation: none !important; stroke-dashoffset: 0 !important; }
 }
+
+/* ---------------------------------------------------------- point lab */
+.pl-controls { display: grid; gap: 12px; margin-top: 28px; max-width: 760px; }
+.pl-ctrl { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 12px; }
+.pl-ctrl > span { font-size: var(--step--1); color: var(--ink-3); }
+.pl-seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: var(--glass); border: 1px solid var(--rule); width: max-content; max-width: 100%; }
+.pl-seg button { font: inherit; font-size: var(--step--1); border: 0; background: none; color: var(--ink-2); padding: 7px 14px; border-radius: 999px; cursor: pointer; transition: background .25s, color .25s; }
+.pl-seg button:hover { color: var(--ink); }
+.pl-seg button.on { background: var(--ink); color: var(--bg); }
+.pl-years { display: flex; align-items: center; gap: 10px; color: var(--ink-3); font-size: var(--step--1); }
+.pl-years select { font: inherit; padding: 7px 12px; border-radius: 10px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink); }
+.pl-summary { margin-top: 22px; font-size: var(--step-1); color: var(--ink-2); max-width: 62ch; }
+.pl-summary b { color: var(--ink); font-weight: 600; }
+.pl-cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.pl-card { border-radius: 16px; background: var(--panel); border: 1px solid var(--rule); transition: transform .3s cubic-bezier(.3,.8,.25,1), border-color .3s, box-shadow .3s;
+  animation: rise-in .6s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i) * 60ms); }
+.pl-card:hover { transform: translateY(-4px); }
+.pl-card.on { border-color: var(--focus); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent); }
+.pl-card button { all: unset; display: grid; gap: 6px; width: 100%; box-sizing: border-box; padding: 16px; cursor: pointer; }
+.pl-card button:focus-visible { outline: 2px solid var(--focus); border-radius: 16px; }
+.pl-card-head { display: flex; justify-content: space-between; align-items: center; }
+.pl-name { font-weight: 600; }
+.pl-arrow { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; background: var(--bg); }
+.pl-arrow.up { color: #d6604d; animation: bob 1.8s ease-in-out infinite; } .pl-arrow.down { color: #4393c3; animation: bob 1.8s ease-in-out infinite reverse; } .pl-arrow.flat { color: var(--ink-3); }
+.pl-sparkline { width: 100%; height: 64px; }
+.pl-spark { fill: none; stroke: var(--ink-2); stroke-width: 1.4; }
+.pl-fit { stroke-width: 2.6; stroke-linecap: round; }
+.pl-rate { font-size: var(--step--1); color: var(--ink-2); } .pl-rate b { color: var(--ink); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.pl-verdict { font-size: .75rem; color: var(--ink-3); } .pl-verdict.yes { color: var(--ink); }
+.pl-detail { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); gap: 32px; align-items: start; }
+.pl-detail h2 { margin: 0; }
+.pl-coords { color: var(--ink-3); font-size: var(--step--1); margin: 6px 0 12px; }
+.pl-d-verdict { color: var(--ink-2); margin: 0 0 10px; } .pl-d-verdict b { color: var(--ink); }
+.pl-chart { width: 100%; height: auto; display: block; }
+.pl-window { fill: color-mix(in srgb, var(--focus) 8%, transparent); }
+.pl-band { fill: #d6604d; opacity: .16; }
+.pl-line { fill: none; stroke: var(--ink-3); stroke-width: 1.2; }
+.pl-dot { fill: var(--ink); } .pl-dot.out { fill: var(--ink-3); opacity: .5; }
+.pl-trend { stroke: #d6604d; stroke-width: 3; stroke-linecap: round; }
+.pl-shift { stroke: var(--ink-2); stroke-dasharray: 4 4; } .pl-shift-label { fill: var(--ink-2); font-size: 11px; }
+.pl-axis text { fill: var(--ink-3); font: 11px Geologica, system-ui, sans-serif; } .pl-axis path, .pl-axis line { stroke: var(--rule); }
+.pl-detail-side { position: sticky; top: 80px; padding: 18px; border-radius: 16px; background: var(--panel); border: 1px solid var(--rule); }
+.pl-actions { display: grid; gap: 8px; margin-top: 14px; }
+.pl-actions .cta-ghost { justify-content: center; font-size: var(--step--1); }
+.pl-two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+.pl-fig { margin: 0; } .pl-fig h3 { margin: 0; }
+.pl-mapsvg, .pl-ranksvg { width: 100%; height: auto; display: block; }
+.pl-sphere { fill: color-mix(in srgb, var(--panel) 70%, transparent); stroke: var(--rule); } .pl-grat { fill: none; stroke: var(--graticule); } .pl-land { fill: var(--nodata); stroke: none; }
+.pl-pin-label { font: 600 11px Geologica, system-ui, sans-serif; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.pl-pin:hover .pl-pin-label, .pl-pin.on .pl-pin-label { opacity: 1; }
+.pl-ring { fill: none; stroke-width: 2; opacity: 0; } .pl-pin.on .pl-ring { animation: pin-ping 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pin-ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+.pl-zero { stroke: var(--rule); } .pl-ci { stroke: var(--ink-3); stroke-width: 1.5; }
+.pl-row-name { fill: var(--ink-2); font: 13px Geologica, system-ui, sans-serif; } .pl-row-name.on { fill: var(--ink); font-weight: 600; }
+@media (max-width: 900px) { .pl-detail, .pl-two { grid-template-columns: 1fr; } .pl-detail-side { position: static; } .pl-ctrl { grid-template-columns: 1fr; gap: 6px; } }

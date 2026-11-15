@@ -7,11 +7,12 @@
 [**Open Drift live**](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/) ·
 [Demo slides](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/slides.html) ·
 [30-second video](docs/Drift-demo-30s.mp4) ·
+[Point lab](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/points.html) ·
 [Field guide](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/learn.html)
 
 ![NASA Space Apps 2026](https://img.shields.io/badge/NASA%20Space%20Apps-2026-0b3d91?style=flat-square)
 ![Challenge](https://img.shields.io/badge/challenge-Earth%20System%20Trend%20Detective-d6604d?style=flat-square)
-![Data](https://img.shields.io/badge/data-GISTEMP%20v4%20·%20GPCP%20v2.3-4393c3?style=flat-square)
+![Data](https://img.shields.io/badge/NASA%20data-GISTEMP%20·%20GPCP%20·%20POWER%2FMERRA--2-4393c3?style=flat-square)
 ![Backend](https://img.shields.io/badge/backend-none-4caf88?style=flat-square)
 ![Tests](https://img.shields.io/badge/stats%20tests-9%20passing-4caf88?style=flat-square)
 
@@ -35,12 +36,15 @@ Every stripe below is one year of NASA's global surface temperature record, comp
 
 ## Features
 
+<img src="docs/readme/globe-unfold.svg" width="100%" alt="Animation of the globe unfolding into a flat map">
+
 | | Feature | What it does |
 |---|---|---|
 | 🌍 | **Living globe** | The opening globe is painted with the live result. Drag to spin it; scroll and it unfolds into an Equal Earth map. |
 | 🗺️ | **Trend atlas** | Every cell shows Sen's slope per decade. Cells without a statistically robust trend fade, so the real signal stands out. |
 | 📍 | **Inspect any place** | Click a cell, drag a box or pick a hotspot. See the time series, the fitted trend with its 95% band, the year of the largest shift and a full statistics table. |
 | ⏯️ | **Year by year** | Press play to watch each year's departure from the window mean. |
+| 📡 | **Point lab** | Temperature, rainfall, humidity and wind from NASA POWER (MERRA-2) at eight places, with trend tests, a ranking, a map and CSV export. |
 | 🕵️ | **Detective case files** | Six guided investigations open the live analysis on a real question, with a hint about what to look for. |
 | 🧭 | **Guided tour** | A ten-step spotlight walks first-time visitors through every part of the atlas. |
 | 📖 | **Field guide** | Twelve plain-language definitions (anomaly, Sen's slope, p-value, persistence, false discovery rate…), each with an animated diagram. |
@@ -63,6 +67,23 @@ Every stripe below is one year of NASA's global surface temperature record, comp
 | 06 · Opposite trends | Can rainfall rise in one part of the Pacific while falling in another? | GPCP, annual, 1979–2025 |
 
 Each case is an ordinary Drift link, so the verdict always comes from the live calculation, never from pre-written text.
+
+## Point lab: NASA POWER and MERRA-2
+
+<img src="docs/readme/point-lab.svg" width="100%" alt="Eight sparklines of NASA POWER air temperature from 1984 to 2024 with Sen's slope lines">
+
+The [Point lab](https://priyanshusharan-cmd.github.io/nasa-space-app-challenge-2026/points.html) adds two more variables the atlas doesn't have, relative humidity and wind speed, from NASA's [POWER](https://power.larc.nasa.gov/) service, which draws on the MERRA-2 reanalysis named in the challenge brief. Pick a variable, a season and a window. Drift computes day-weighted yearly means from the monthly values, tests every place, and controls false discoveries across all eight.
+
+| Place | Why it's interesting |
+|---|---|
+| Northern India | Monsoon, aerosols and irrigation; one of the few places where air temperature is falling |
+| Central Amazon | Rainforest rainfall and drought |
+| Arctic Alaska | Arctic amplification |
+| Central Sahara | The driest air on the list |
+| Central Europe | The fastest-warming place in the set |
+| Eastern Australia | Drought and flood swings |
+| Equatorial Pacific | The heart of El Niño |
+| East Africa | The "East African paradox" in long rains |
 
 ## How it works
 
@@ -92,9 +113,12 @@ In the browser, a pool of web workers computes every cell's trend in parallel. T
 
 ## Data
 
+<img src="docs/readme/nasa-sources.svg" width="100%" alt="Three NASA data sources orbiting Drift: GISTEMP, GPCP and NASA POWER">
+
 | Variable | Product | Grid | Period |
 |---|---|---|---|
 | Surface temperature anomaly (°C vs 1951–1980) | [NASA GISS GISTEMP v4](https://data.giss.nasa.gov/gistemp/) | 2°, 1200 km smoothing | 1900–present |
+| Air temperature, precipitation, relative humidity, wind speed at 8 points | [NASA POWER](https://power.larc.nasa.gov/) monthly point API (MERRA-2 and POWER sources, v2.10) | point | 1984–2024 |
 | Precipitation (mm/day) | [GPCP v2.3 monthly](https://www.ncei.noaa.gov/products/climate-data-records/precipitation-gpcp-monthly) (NASA GSFC / UMD, via NOAA NCEI) | 2.5° | 1979–present |
 
 To add a dataset, add an entry to `datasets.json` (a single NetCDF URL or a directory of monthly files) and run the build. The app reads the catalog and each dataset's `meta.json`, so new datasets appear without code changes.
@@ -120,6 +144,7 @@ npm run data                                   # all datasets
 
 ```text
 web/index.html          the atlas
+web/points.html         point lab: NASA POWER (MERRA-2) at eight places
 web/learn.html          field guide: every term, with animated diagrams
 web/about.html          the challenge, method, data and team
 web/slides.html         seven-slide demo deck
@@ -127,6 +152,7 @@ web/js/main.js          state, rendering and interaction
 web/js/worker.js        per-cell trends, run on a pool of workers
 web/js/stats.js         Sen, Mann–Kendall (Hamed–Rao), Pettitt, FDR, regional means
 web/js/map.js           canvas globe and Equal Earth map
+web/js/points.js        point lab analysis and charts
 web/js/cases.js         detective case files
 web/js/tour.js          guided tour
 web/data/               built NASA grids and world geometry
@@ -137,7 +163,7 @@ docs/                   demo video, slides PDF and README graphics
 
 ## Credits
 
-**Data:** GISTEMP Team (NASA GISS); GPCP (Adler et al., 2018). **Libraries and assets:** D3 and TopoJSON (ISC, Mike Bostock); Natural Earth via world-atlas (public domain); ColorBrewer palettes (Cynthia Brewer); Geologica typeface (SIL OFL).
+**Data:** GISTEMP Team (NASA GISS); GPCP (Adler et al., 2018); NASA POWER Project (NASA Langley Research Center), using MERRA-2 (NASA GMAO). **Libraries and assets:** D3 and TopoJSON (ISC, Mike Bostock); Natural Earth via world-atlas (public domain); ColorBrewer palettes (Cynthia Brewer); Geologica typeface (SIL OFL).
 
 **Use of AI:** AI coding assistants helped write parts of the code and documentation. All scientific values come from NASA data, and the statistics are checked against independent reference libraries in the test suite.
 
